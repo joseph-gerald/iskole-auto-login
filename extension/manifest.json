@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json.schemastore.org/chrome-manifest.json",
+  "manifest_version": 3,
+  "icons": {
+    "128": "public/icons/128.png"
+  },
+  "version": "1.0",
+  "name": "iSkole Auto Login",
+  "description": "Auto login to iSkole",
+  "author": "Joseph Gerald",
+  "permissions": [
+    "scripting",
+    "activeTab",
+    "storage",
+    "webRequestBlocking",
+    "<all_urls>",
+    "cookies",
+    "tabs",
+    "webRequest"
+  ],
+  "action": {
+    "default_popup": "popup/popup.html"
+  },
+  "background": {
+    "service_worker": "service_worker.js"
+  },
+  "host_permissions": [
+    "<all_urls>"
+  ]
+}

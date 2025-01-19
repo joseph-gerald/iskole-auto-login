@@ -12,9 +12,6 @@
     "scripting",
     "activeTab",
     "storage",
-    "webRequestBlocking",
-    "<all_urls>",
-    "cookies",
     "tabs",
     "webRequest"
   ],

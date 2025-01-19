@@ -43,7 +43,7 @@ async function handleTabUpdates(tabIdentifier, info, tabDetails) {
         console.log("firstCon", firstCon)
         switch (tabDetails.url) {
             case "https://iskole.net/elev/?isFeideinnlogget=true&ojr=login":
-                chrome.tabs.query({ // change the tab url
+                chrome.tabs.query({
                     currentWindow: true
                 }, function (tab) {
                     redirCount++;

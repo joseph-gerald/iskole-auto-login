@@ -53,6 +53,8 @@ async function handleTabUpdates(tabIdentifier, info, tabDetails) {
                     chrome.tabs.update(tab.id, { url: path });
                 });
 
+                clearInterval(resetTimeout);
+                
                 resetTimeout = setTimeout(() => {
                     redirCount = 0;
                 }, 1000);

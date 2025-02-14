@@ -13,11 +13,20 @@
 
 <body class="bg-background text-text font-mono min-w-[490px] min-h-[300px] flex flex-col">
     <main class="w-full h-full flex flex-col justify-between grow p-4">
-        <div id="page-title" class="text-2xl font-bold">
+        <div id="page-title" class="text-xl font-bold lowercase">
+            Login Configuration
+        </div>
+
+        <div class="flex gap-2 mt-2">
+            <input type="text" id="username" class="border border-border rounded-md p-2 w-1/2 bg-highlight" placeholder="Username" autocomplete="off">
+            <input type="password" id="password" class="border border-border rounded-md p-2 w-1/2 bg-highlight" placeholder="Password">
+        </div>
+
+        <div id="page-title" class="text-lg font-bold mt-4 lowercase">
             Changelogs
         </div>
 
-        <div id="content" class="bg-highlight p-3 h-full grow mt-4 border border-border rounded-md">
+        <div id="content" class="bg-highlight p-3 h-full grow mt-2 border border-border rounded-md">
             Loading...
         </div>
     </main>

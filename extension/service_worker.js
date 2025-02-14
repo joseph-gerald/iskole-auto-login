@@ -1,6 +1,19 @@
 let clicked = false;
 let redirCount = 0;
 
+let username = null;
+let password = null;
+
+async function updateCredentials() {
+    await chrome.storage.local.get(["username", "password"], function (result) {
+        result.username ??= "";
+        result.password ??= "";
+
+        username = result.username;
+        password = result.password;
+    });
+}
+
 async function executeScript(tabId, func) {
     return new Promise((resolve, reject) => {
         chrome.scripting.executeScript({
@@ -49,7 +62,7 @@ async function handleTabUpdates(tabIdentifier, info, tabDetails) {
                     redirCount++;
 
                     const path = redirCount > 1 ? "https://iskole.net/iskole_login/dataporten_login?RelayState=/elev" : "https://iskole.net/elev/?isFeideinnlogget=true&ojr=timeplan";
-                    
+
                     chrome.tabs.update(tab.id, { url: path });
                 });
 
@@ -61,7 +74,33 @@ async function handleTabUpdates(tabIdentifier, info, tabDetails) {
                 break;
         }
 
+        if (host == "idp.feide.no" && url.pathname == "/simplesaml/module.php/feide/login" && clicked) {
+            setTimeout(() => {
+                executeScript(tabIdentifier, () => {
+                    window.oniskoleloaded = () => {
+                        const usernameElm = document.getElementById("username");
+                        const passwordElm = document.getElementById("password");
+
+                        const dataElm = document.querySelector("super-secret-data");
+                        const username = dataElm.getAttribute("username");
+                        const password = dataElm.getAttribute("password");
+
+                        console.log(usernameElm, passwordElm);
+                        console.log(username, password);
+
+                        if (usernameElm && passwordElm) {
+                            usernameElm.value = username ?? "";
+                            passwordElm.value = password ?? "";
+
+                            document.querySelector("button[type='submit']").click();
+                        }
+                    }
+                });
+            }, 0);
+        }
+
         if (host == "auth.dataporten.no" && url.pathname == "/accountchooser" && !clicked) {
+            console.log("clicking");
             clicked = true;
 
             setTimeout(() => {
@@ -78,4 +117,15 @@ async function handleTabUpdates(tabIdentifier, info, tabDetails) {
         }
     }
 }
+
+setInterval(() => {
+    updateCredentials();
+}, 250);
+
+chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
+    if (request.type == "init") {
+        await chrome.tabs.sendMessage(sender.tab.id, { type: "init", data: { username, password } });
+    }
+});
+
 chrome.tabs.onUpdated.addListener(handleTabUpdates);

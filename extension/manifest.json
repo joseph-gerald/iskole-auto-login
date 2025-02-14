@@ -23,5 +23,8 @@
   },
   "host_permissions": [
     "<all_urls>"
+  ],
+  "content_scripts": [
+    {"js": ["scripts/main.js"], "matches": ["*://idp.feide.no/*"]}
   ]
 }
